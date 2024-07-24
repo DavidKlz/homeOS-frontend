@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../config/constants/homeos_urls.dart';
+import '../../config/routes/home_os_router.dart';
 import '../../config/routes/routes.dart';
 import '../../logic/provider/file_list_provider.dart';
 
@@ -15,12 +15,10 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final navigationKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
-    double minSize = MediaQuery.of(context).size.width / 4;
-    int countOfImages = (MediaQuery.of(context).size.width / 200).round();
-    double size =
-        min(minSize, MediaQuery.of(context).size.width / countOfImages);
     return Scaffold(
       appBar: AppBar(
         title: const FittedBox(
@@ -35,41 +33,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: const Icon(Icons.sync))
         ],
       ),
-      body: SingleChildScrollView(
-        child: ref.watch(fileListProvider).when(
-              data: (list) => Center(
-                child: Wrap(
-                  spacing: 5,
-                  runSpacing: 5,
-                  children: list
-                      .map(
-                        (e) => InkWell(
-                          onTap: () => Navigator.of(context).pushNamed(
-                            Routes.detail,
-                            arguments: list.indexOf(e),
-                          ),
-                          child: SizedBox(
-                            width: size - 5,
-                            height: size - 5,
-                            child: Image.network(
-                              HomeOSUrls.thumbById(e.id),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-              error: (error, stackTrace) => Text(stackTrace.toString()),
-              loading: () => const Center(
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.image), label: "Gallery"),
+          BottomNavigationBarItem(icon: Icon(Icons.photo_album), label: "Album"),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark_add), label: "Tags"),
+        ],
+        onTap: (index) {
+          switch(index) {
+            case 0:
+              navigationKey.currentState?.pushNamedAndRemoveUntil(Routes.gallery, (_) => false);
+              break;
+            case 1:
+              break;
+            case 2:
+              navigationKey.currentState?.pushNamedAndRemoveUntil(Routes.tags, (_) => false);
+              break;
+          }
+        },
+      ),
+      body: Navigator(
+        key: navigationKey,
+        onGenerateRoute: HomeOSRouter.onGenerateHomePage,
       ),
     );
   }

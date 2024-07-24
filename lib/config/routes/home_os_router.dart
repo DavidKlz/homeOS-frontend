@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../view/pages/gallery_page.dart';
+import '../../view/pages/tag_page.dart';
 import '../../view/screens/detail_screen.dart';
 import '../../view/screens/home_screen.dart';
 import 'routes.dart';
@@ -17,6 +19,16 @@ class HomeOSRouter {
       case Routes.home:
       default:
         return _createRoute(const HomeScreen());
+    }
+  }
+
+  static Route<dynamic> onGenerateHomePage(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.tags:
+        return _createFadeAnimationRoute(const TagPage());
+      case Routes.home:
+      default:
+        return _createFadeAnimationRoute(const GalleryPage());
     }
   }
 
