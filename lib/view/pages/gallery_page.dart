@@ -31,7 +31,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
              children: files
                  .map(
                    (e) => InkWell(
-                 onTap: () => Navigator.of(context).pushNamed(
+                 onTap: () => Navigator.of(context, rootNavigator: true).pushNamed(
                    Routes.detail,
                    arguments: files.indexOf(e),
                  ),
