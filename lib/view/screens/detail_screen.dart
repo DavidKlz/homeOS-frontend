@@ -13,24 +13,29 @@ class DetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: ref.watch(fileListProvider).when(
-            data: (files) => SizedBox.expand(
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  initialPage: index,
-                  viewportFraction: 1,
-                  height: MediaQuery.of(context).size.height,
+      body: Stack(
+        children: [
+          ref.watch(fileListProvider).when(
+                data: (files) => SizedBox.expand(
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      initialPage: index,
+                      viewportFraction: 1,
+                      height: MediaQuery.of(context).size.height,
+                    ),
+                    items: files.map((e) {
+                      return Hero(tag: 'media-${e.id}', child: DetailViewWidget(file: e));
+                    }).toList(),
+                  ),
                 ),
-                items: files.map((e) {
-                  return DetailViewWidget(file: e);
-                }).toList(),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                error: (error, stackTrace) => Text(stackTrace.toString()),
               ),
-            ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            error: (error, stackTrace) => Text(stackTrace.toString()),
-          ),
+          IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.arrow_back),),
+        ],
+      ),
     );
   }
 }

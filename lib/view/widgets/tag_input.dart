@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../data/meta_info_dto.dart';
+
 class TagInput extends StatefulWidget {
-  final List<String> entries;
-  final Function(String value) onAddTag;
-  final Function(String value) onRemoveTag;
+  final String type;
+  final Map<int, String> entries;
+  final Function(MetaInfoDTO value) onAddTag;
+  final Function(String type, int id) onRemoveTag;
 
   const TagInput({
+    required this.type,
     required this.entries,
     required this.onAddTag,
     required this.onRemoveTag,
@@ -48,22 +52,22 @@ class _TagInputState extends State<TagInput> {
   }
 
   void _onSubmitted(String value) {
-    widget.onAddTag.call(value);
+    widget.onAddTag.call(MetaInfoDTO(id: -1, type: widget.type, value: value));
     controller.text = "";
     focusNode.requestFocus();
   }
 
-  void _onDeleted(String value) {
-    widget.onRemoveTag.call(value);
+  void _onDeleted(int id) {
+    widget.onRemoveTag.call(widget.type, id);
   }
 
   List<Chip> _buildChips() {
-    return widget.entries
+    return widget.entries.entries
         .map(
           (e) => Chip(
-            label: Text(e),
+            label: Text(e.value),
             deleteIcon: const Icon(Icons.close),
-            onDeleted: () => _onDeleted(e),
+            onDeleted: () => _onDeleted(e.key),
           ),
         )
         .toList();

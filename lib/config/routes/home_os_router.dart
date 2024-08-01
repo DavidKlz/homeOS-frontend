@@ -13,7 +13,7 @@ class HomeOSRouter {
     switch (settings.name) {
       case Routes.detail:
         var index = settings.arguments as int;
-        return _createFadeAnimationRoute(DetailScreen(
+        return _createRoute(DetailScreen(
           index: index,
         ));
       case Routes.home:

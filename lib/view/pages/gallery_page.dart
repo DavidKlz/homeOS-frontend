@@ -38,9 +38,12 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
                  child: SizedBox(
                    width: size - 5,
                    height: size - 5,
-                   child: Image.network(
-                     HomeOSUrls.thumbById(e.id),
-                     fit: BoxFit.cover,
+                   child: Hero(
+                     tag: 'media-${e.id}',
+                     child: Image.network(
+                       HomeOSUrls.thumbById(e.id),
+                       fit: BoxFit.cover,
+                     ),
                    ),
                  ),
                ),
