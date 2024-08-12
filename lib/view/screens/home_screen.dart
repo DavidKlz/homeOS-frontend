@@ -16,6 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final navigationKey = GlobalKey<NavigatorState>();
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.image), label: "Gallery"),
           BottomNavigationBarItem(icon: Icon(Icons.photo_album), label: "Album"),
@@ -43,11 +45,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           switch(index) {
             case 0:
               navigationKey.currentState?.pushNamedAndRemoveUntil(Routes.gallery, (_) => false);
+              setState(() => currentIndex = 0);
               break;
             case 1:
+              setState(() => currentIndex = 1);
               break;
             case 2:
               navigationKey.currentState?.pushNamedAndRemoveUntil(Routes.tags, (_) => false);
+              setState(() => currentIndex = 2);
               break;
           }
         },
