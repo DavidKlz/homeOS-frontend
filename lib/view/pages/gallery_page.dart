@@ -51,7 +51,7 @@ class _GalleryPageState extends ConsumerState<GalleryPage> {
                  .toList(),
            ),
          ),
-         error: (error, stackTrace) => Text(stackTrace.toString()),
+         error: (error, stackTrace) => const Text("No Images found"),
          loading: () => const Center(
            child: SizedBox(
              width: 50,
